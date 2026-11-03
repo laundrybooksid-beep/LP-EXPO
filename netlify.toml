@@ -1,0 +1,12 @@
+# The deployable page is own-domain/index.html (built by build.ps1 on Windows).
+# There is no build step on Netlify: commit the rebuilt own-domain/index.html and push.
+[build]
+  publish = "own-domain"
+  command = ""
+
+# Only the page is served; the setup notes stay in the repo
+[[redirects]]
+  from = "/SETUP.md"
+  to = "/"
+  status = 301
+  force = true

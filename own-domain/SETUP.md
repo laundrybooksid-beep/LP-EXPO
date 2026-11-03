@@ -55,7 +55,9 @@ GA4 reads these tags automatically. The page also adds `Kode: poster-a` to the e
 
 ## 5. Host it
 
-Use any static host with HTTPS: Netlify Drop (drag the `own-domain` folder in), Cloudflare Pages, Vercel, or your existing cPanel.
+**Netlify (connected to the GitHub repo):** `netlify.toml` at the repo root tells Netlify to publish the `own-domain` folder, so every push to `main` redeploys the page. Run `build.ps1` and commit the updated `own-domain/index.html` before pushing; Netlify does not run the build.
+
+Other options: Netlify Drop (drag the `own-domain` folder in), Cloudflare Pages, Vercel, or your existing cPanel.
 
 ## 6. Test before ads go live
 
