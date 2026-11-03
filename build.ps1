@@ -54,14 +54,20 @@ $ep = New-Object System.Drawing.Imaging.EncoderParameters 1
 $ep.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter ([System.Drawing.Imaging.Encoder]::Quality), 74L
 # Alt text per photo (matched on the start of the file name); anything else gets the generic text
 $alts = @{
-  "IMG_0588" = "Nirwan menerima plakat di seminar Peluang Usaha Bisnis Laundry BERANI dan LaundryBiz"
   "IMG_0594" = "Foto bersama peserta seminar BERANI dan LaundryBiz"
+  "WhatsApp Image 2026-11-03 at 10.37.36" = "Penyerahan sertifikat penghargaan bersama Nirwan di kegiatan BERANI"
+}
+# Vertical crop focus per photo (CSS background-position y); default leans low, where people usually are
+$focus = @{
+  "WhatsApp Image 2026-11-03 at 10.37.36" = "38%"
 }
 $figs = @(); $galleryRules = @(); $n = 0
 foreach ($f in $photos) {
   $n++
   $alt = "Dokumentasi kegiatan BERANI dan LaundryBiz"
   foreach ($k in $alts.Keys) { if ($f.Name.StartsWith($k)) { $alt = $alts[$k] } }
+  $posY = "72%"
+  foreach ($k in $focus.Keys) { if ($f.Name.StartsWith($k)) { $posY = $focus[$k] } }
   $img = [System.Drawing.Image]::FromFile($f.FullName)
   # respect the camera's EXIF orientation
   if ($img.PropertyIdList -contains 0x0112) {
@@ -73,7 +79,7 @@ foreach ($f in $photos) {
   $ms = New-Object IO.MemoryStream; $bmp.Save($ms, $enc, $ep)
   $b64 = [Convert]::ToBase64String($ms.ToArray()); $ms.Dispose(); $bmp.Dispose(); $img.Dispose()
   $vars += "  --galeri-${n}: url(""data:image/jpeg;base64,$b64"");"
-  $galleryRules += ".gallery figure:nth-child($n) { background-image: var(--galeri-$n); }"
+  $galleryRules += ".gallery figure:nth-child($n) { background-image: var(--galeri-$n); background-position: 50% $posY; }"
   $figs += "        <figure class=""reveal"" role=""img"" aria-label=""$alt""></figure>"
 }
 
