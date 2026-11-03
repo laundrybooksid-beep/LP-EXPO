@@ -370,6 +370,14 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
 .sticky .s-info { font-size: 12px; line-height: 1.4; min-width: 0; opacity: .9; }
 .sticky .s-info b { display: block; font: 800 16px/1.3 var(--font-display); }
 .sticky .pill { padding: 12px 18px; font-size: 14px; }
+/* Phones: the "Powered by Netlify" badge (free plan) floats over the bottom-right corner, so the
+   button sits on the left and the price line is dropped (the price is already in the hero and tickets). */
+@media (max-width: 599px) {
+  .sticky { justify-content: flex-start; }
+  .sticky .s-info { display: none; }
+  .sticky .pill { max-width: calc(100% - 176px); min-width: 0; text-align: center; line-height: 1.25; padding: 12px 14px; }
+}
+@media (max-width: 349px) { .sticky .pill { white-space: normal; padding: 10px 14px; } }
 @media (min-width: 960px) { .sticky { display: none; } body { padding-bottom: 0; } }
 
 /* ===== Entrance + scroll reveal (visible at rest; skipped under reduced motion) ===== */
