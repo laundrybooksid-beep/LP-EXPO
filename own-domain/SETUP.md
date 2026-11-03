@@ -58,7 +58,18 @@ pixelId: ""       // Meta Pixel ID
 
 ## 3. Meta Pixel
 
-Put the Pixel ID in `pixelId`. The page fires `PageView` on load, `InitiateCheckout` on a registration tap and `Contact` on a question tap. To optimize ads for people who tap a WhatsApp registration button, use `InitiateCheckout`.
+Pixel `1418822797097429` is set in `pixelId`. The page sends:
+
+| Meta event | Type | When |
+| --- | --- | --- |
+| `PageView` | standard | Every page load |
+| `InitiateCheckout` | standard | A tap on a WhatsApp registration button, with `value` (ticket price) and `currency` IDR |
+| `Contact` | standard | A tap on "Tanya dulu" |
+| `scroll_50` | custom | Half of the page in view, once per visit |
+| `engaged_30sec` | custom | 30 seconds with the page visible, once per visit |
+| `high_intent` | custom | Both of the above in one visit |
+
+To optimize ads for registrations, use `InitiateCheckout`. For retargeting, create a Custom Audience in Meta Ads Manager → Audiences → Create audience → Custom audience → Website → event `high_intent`. Custom events show up in Events Manager after the first one is received; to use one as an optimization goal, create a Custom Conversion from it (Events Manager → Custom conversions).
 
 ## 4. Ad URLs
 
