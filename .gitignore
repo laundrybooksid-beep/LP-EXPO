@@ -1,0 +1,10 @@
+# Windows clutter
+Thumbs.db
+desktop.ini
+
+# Temporary preview copies made while checking the page locally
+own-domain/_preview.html
+
+# iPhone originals; export to JPG/PNG for the gallery instead
+*.heic
+*.HEIC
