@@ -11,7 +11,8 @@ $vars = @(
   @{ name = "--logo-berani"; file = "assets\logo-berani.png" },
   @{ name = "--logo-laundrybiz"; file = "assets\logo-laundrybiz.png" },
   @{ name = "--logo-hipli"; file = "assets\logo-hipli.png" },
-  @{ name = "--photo-nirwan"; file = "assets\nirwan.jpg" }
+  @{ name = "--photo-nirwan"; file = "assets\nirwan.jpg" },
+  @{ name = "--hero-bg"; file = "assets\hero-laundry.jpg" }
 ) | ForEach-Object {
   $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $root $_.file)))
   $mime = if ($_.file -like "*.jpg") { "image/jpeg" } else { "image/png" }
