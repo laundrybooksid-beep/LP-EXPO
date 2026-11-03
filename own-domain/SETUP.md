@@ -19,29 +19,46 @@ gaId: "",         // GA4 Measurement ID, e.g. "G-ABC123XYZ"
 pixelId: ""       // Meta Pixel ID
 ```
 
-Also replace the speaker photo placeholders, marked `TODO: Nirwan`, with `<img src="nirwan.jpg" alt="Nirwan">`, and upload the image next to `index.html`.
 
 ## 2. Google Analytics 4
 
-1. In analytics.google.com, go to **Admin → Data streams → Add stream → Web**. Enter your domain and copy the **Measurement ID** (`G-…`) into `gaId`.
-2. Keep **Enhanced measurement** on. It tracks page views, scroll depth and outbound clicks automatically.
-3. The page also sends these events:
+1. In analytics.google.com, go to **Admin → Data streams → Add stream → Web**. Enter your domain and copy the **Measurement ID** (`G-…`) into `gaId`. Run `build.ps1`, commit and push.
+2. Keep **Enhanced measurement** on (it adds outbound clicks and its own 90% `scroll`).
 
-| Event | When it fires | Parameters |
-| --- | --- | --- |
-| `generate_lead` | A tap on any "Daftar via WhatsApp" or "Minta link member" button | `cta_location` (nav, hero, sticky, ticket_berani, ticket_nonmember, member_note, final), `ticket`, `value`, `currency` |
-| `whatsapp_question` | A tap on "Tanya dulu" | `cta_location` |
-| `view_tickets` | The tickets section scrolls into view (once per visit) | none |
-| `faq_open` | An FAQ question is opened | `question` |
-| `open_maps` | A tap on the Google Maps link | none |
+### Events
 
-4. In **Admin → Events**, mark `generate_lead` as a **key event**, so it shows up as a conversion.
-5. To see which ad drives registrations, use the report **Reports → Engagement → Events → generate_lead**, broken down by *Session source / medium* and *Session manual ad content*.
-6. To make `cta_location` and `ticket` show up in reports, register them under **Admin → Custom definitions → Create custom dimension** (scope: Event).
+| Event | Sent by | When it fires | Parameters |
+| --- | --- | --- | --- |
+| `page_view` | GA4 automatically | Every page load | |
+| `first_visit` | GA4 automatically | A user's first visit (GA4 reserves this name; the page can't send it) | |
+| `scroll_50` | Page | Half of the page has been in view, once per visit | `percent_scrolled` = 50 |
+| `engaged_30sec` | Page | 30 seconds with the page visible (background-tab time doesn't count), once per visit | `engagement_seconds` = 30 |
+| `high_intent` | Page | Once both `scroll_50` and `engaged_30sec` have fired in the same visit | `trigger`; also sets the user property `high_intent_user` = `yes` |
+| `begin_checkout` | Page | A tap on any "Daftar via WhatsApp" or "Saya member HIPLI" button (initiate checkout) | `currency` IDR, `value` (ticket price), `items`, `ticket`, `cta_location`, `method` = whatsapp |
+| `whatsapp_question` | Page | A tap on "Tanya dulu" (also WhatsApp, but a question, not a registration) | `cta_location` |
+| `view_tickets` | Page | The tickets section scrolls into view, once per visit | |
+| `faq_open` | Page | An FAQ question is opened | `question` |
+| `open_maps` | Page | A tap on the Google Maps link | |
+
+`cta_location` is one of: nav, hero, hero_member, sticky, ticket_berani, ticket_nonmember, member_note, final, hero_ask, faq_ask, final_ask.
+
+### One-time setup in GA4 Admin
+
+1. **Key events:** Admin → Events (or Key events) → mark `begin_checkout` and `high_intent` as key events. Events only appear in this list after they've been received once, so do this after the test below.
+2. **Custom definitions:** Admin → Custom definitions → Create custom dimension:
+   - Scope **User**, user property `high_intent_user`
+   - Scope **Event**: `cta_location`, `ticket`, `trigger`
+3. **"High intent user" audience:** Admin → Audiences → New audience → Create a custom audience:
+   - Name: `High intent user`
+   - Condition: Event `high_intent` (or user property `high_intent_user` exactly matches `yes`)
+   - Membership duration: 30 days (or what fits your remarketing)
+
+   This audience can be linked to Google Ads for remarketing. It only collects people from the moment it's created.
+4. **Funnel (optional):** Explore → Funnel exploration with steps `page_view` → `scroll_50` → `engaged_30sec` → `high_intent` → `begin_checkout`.
 
 ## 3. Meta Pixel
 
-Put the Pixel ID in `pixelId`. The page fires `PageView` on load, `Lead` on a registration tap and `Contact` on a question tap. To optimize ads for registrations, use `Lead`.
+Put the Pixel ID in `pixelId`. The page fires `PageView` on load, `InitiateCheckout` on a registration tap and `Contact` on a question tap. To optimize ads for people who tap a WhatsApp registration button, use `InitiateCheckout`.
 
 ## 4. Ad URLs
 
@@ -61,11 +78,12 @@ Other options: Netlify Drop (drag the `own-domain` folder in), Cloudflare Pages,
 
 ## 6. Test before ads go live
 
-1. Open the page with the test URL above.
-2. In GA4 **Admin → DebugView**, or the Realtime report, check that `page_view` arrives.
-3. Tap "Daftar via WhatsApp". WhatsApp should open with the message filled in and ending in `Kode: poster-a`, and `generate_lead` should appear in Realtime.
-4. In Meta Events Manager → Test events, check that `PageView` and `Lead` arrive.
+1. Open the page with the test URL above plus `&ga_debug=1` at the end. That turns on GA4 DebugView for your visit and prints every event in the browser console as `[ga4] …`.
+2. In GA4 **Admin → DebugView**, check that `page_view` arrives.
+3. Scroll past the middle of the page and stay 30 seconds: `scroll_50`, `engaged_30sec` and then `high_intent` should arrive.
+4. Tap "Daftar via WhatsApp". WhatsApp should open with the message filled in and ending in `Kode: poster-a`, and `begin_checkout` should appear.
+5. In Meta Events Manager → Test events, check that `PageView` and `InitiateCheckout` arrive.
 
 ## Daily routine
 
-Every WhatsApp registration is a lead. The team replies with the payment link the same day. Anyone who doesn't pay within 24 hours gets one follow-up message. Compare the GA4 `generate_lead` count with the chats you received and the payments you've confirmed.
+Every WhatsApp registration starts a checkout. The team replies with the payment link the same day. Anyone who doesn't pay within 24 hours gets one follow-up message. Compare the GA4 `begin_checkout` count with the chats you received and the payments you've confirmed.
