@@ -54,8 +54,13 @@ $ep = New-Object System.Drawing.Imaging.EncoderParameters 1
 $ep.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter ([System.Drawing.Imaging.Encoder]::Quality), 74L
 # Alt text per photo (matched on the start of the file name); anything else gets the generic text
 $alts = @{
-  "IMG_0594" = "Foto bersama peserta seminar BERANI dan LaundryBiz"
-  "WhatsApp Image 2026-11-03 at 10.37.36" = "Penyerahan sertifikat penghargaan bersama Nirwan di kegiatan BERANI"
+  "IMG_0594" = "Foto bersama peserta seminar bisnis laundry dengan Kantor POS"
+  "WhatsApp Image 2026-11-03 at 10.37.36" = "Nirwan, CEO BERANI Laundry, bersama Hendra Chairuddin, Ketua Umum HIPLI, memegang sertifikat penghargaan"
+}
+# Visible caption under each photo (matched the same way); no entry means no caption
+$captions = @{
+  "IMG_0594" = "Kegiatan seminar bisnis laundry dengan Kantor POS"
+  "WhatsApp Image 2026-11-03 at 10.37.36" = "Nirwan, CEO BERANI Laundry dengan Hendra Chairuddin Ketum HIPLI 2026&#8209;2029"
 }
 # Vertical crop focus per photo (CSS background-position y); default leans low, where people usually are
 $focus = @{
@@ -68,6 +73,8 @@ foreach ($f in $photos) {
   foreach ($k in $alts.Keys) { if ($f.Name.StartsWith($k)) { $alt = $alts[$k] } }
   $posY = "72%"
   foreach ($k in $focus.Keys) { if ($f.Name.StartsWith($k)) { $posY = $focus[$k] } }
+  $cap = ""
+  foreach ($k in $captions.Keys) { if ($f.Name.StartsWith($k)) { $cap = $captions[$k] } }
   $img = [System.Drawing.Image]::FromFile($f.FullName)
   # respect the camera's EXIF orientation
   if ($img.PropertyIdList -contains 0x0112) {
@@ -79,8 +86,9 @@ foreach ($f in $photos) {
   $ms = New-Object IO.MemoryStream; $bmp.Save($ms, $enc, $ep)
   $b64 = [Convert]::ToBase64String($ms.ToArray()); $ms.Dispose(); $bmp.Dispose(); $img.Dispose()
   $vars += "  --galeri-${n}: url(""data:image/jpeg;base64,$b64"");"
-  $galleryRules += ".gallery figure:nth-child($n) { background-image: var(--galeri-$n); background-position: 50% $posY; }"
-  $figs += "        <figure class=""reveal"" role=""img"" aria-label=""$alt""></figure>"
+  $galleryRules += ".gallery figure:nth-child($n) .shot { background-image: var(--galeri-$n); background-position: 50% $posY; }"
+  $capHtml = if ($cap) { "<figcaption>$cap</figcaption>" } else { "" }
+  $figs += "        <figure class=""reveal""><div class=""shot"" role=""img"" aria-label=""$alt""></div>$capHtml</figure>"
 }
 
 $block = "/* logos:start */`n:root {`n" + ($vars -join "`n") + "`n}`n" + ($galleryRules -join "`n") + "`n/* logos:end */"
