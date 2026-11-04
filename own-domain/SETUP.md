@@ -13,12 +13,13 @@ Edit `../seminar-landing.html`, then run `build.ps1` from the project folder. Th
 The block is near the bottom of `seminar-landing.html`:
 
 ```js
-tickets: { berani: { price: null } },  // BERANI first-10 price, e.g. 250000
+tickets: { berani: { price: null, soldOut: false } },  // BERANI first-10 price, e.g. 250000
 seatsLeft: null,  // set a number to show "Sisa N kursi"; update by hand
 gaId: "",         // GA4 Measurement ID, e.g. "G-ABC123XYZ"
 pixelId: ""       // Meta Pixel ID
 ```
 
+**The "Spesial via BERANI" card** shows only when `berani.price` is a number above 0 and `soldOut` is `false`. With a price it shows the big price, the struck-through Rp450.000 and a "Hemat RpX" label. With no price, or with `soldOut: true` (set it when the first 10 seats are gone), the card is hidden, and the Non-member card stays alone. When several cards are available, the cheapest comes first.
 
 ## 2. Google Analytics 4
 
@@ -32,15 +33,19 @@ pixelId: ""       // Meta Pixel ID
 | `page_view` | GA4 automatically | Every page load | |
 | `first_visit` | GA4 automatically | A user's first visit (GA4 reserves this name; the page can't send it) | |
 | `scroll_50` | Page | Half of the page has been in view, once per visit | `percent_scrolled` = 50 |
+| `engaged_10sec` | Page | 10 seconds with the page visible, once per visit. Tells "left right away" (no event) from "read for a moment" (this event, but no `engaged_30sec`) | `engagement_seconds` = 10 |
 | `engaged_30sec` | Page | 30 seconds with the page visible (background-tab time doesn't count), once per visit | `engagement_seconds` = 30 |
 | `high_intent` | Page | Once both `scroll_50` and `engaged_30sec` have fired in the same visit | `trigger`; also sets the user property `high_intent_user` = `yes` |
-| `begin_checkout` | Page | A tap on any "Daftar via WhatsApp" or "Saya member HIPLI" button (initiate checkout) | `currency` IDR, `value` (ticket price), `items`, `ticket`, `cta_location`, `method` = whatsapp |
-| `whatsapp_question` | Page | A tap on "Tanya dulu" (also WhatsApp, but a question, not a registration) | `cta_location` |
+| `begin_checkout` | Page | A tap on a "Daftar via WhatsApp" button (initiate checkout) | `currency` IDR, `value` (ticket price), `items`, `ticket`, `cta_location`, `method` = whatsapp |
+| `whatsapp_question` | Page | A tap on "Tanya dulu" (also WhatsApp, but a question, not a registration) | `ticket` = question, `cta_location`, `method` |
+| `hipli_member_click` | Page | A tap on "Saya member HIPLI". Its own event, not a checkout: members get their link from the team | `ticket` = member, `cta_location`, `method` |
 | `view_tickets` | Page | The tickets section scrolls into view, once per visit | |
 | `faq_open` | Page | An FAQ question is opened | `question` |
 | `open_maps` | Page | A tap on the Google Maps link | |
 
-`cta_location` is one of: nav, hero, hero_member, sticky, ticket_berani, ticket_nonmember, member_note, final, hero_ask, faq_ask, final_ask.
+`begin_checkout` and `whatsapp_question` are two separate paths, not steps of one funnel.
+
+`cta_location` says which button was tapped: `nav`, `hero`, `mid_tentang`, `mid_materi`, `mid_pembicara`, `mid_kegiatan`, `tiket_berani`, `tiket_umum`, `tiket_hipli`, `faq`, `footer`, `sticky_bar`. The `mid_*` values are the compact CTA blocks between sections; `mid_tentang` and `mid_kegiatan` were added so no stretch of the page goes more than about 1,600 px without a register button.
 
 ### One-time setup in GA4 Admin
 
@@ -54,7 +59,7 @@ pixelId: ""       // Meta Pixel ID
    - Membership duration: 30 days (or what fits your remarketing)
 
    This audience can be linked to Google Ads for remarketing. It only collects people from the moment it's created.
-4. **Funnel (optional):** Explore → Funnel exploration with steps `page_view` → `scroll_50` → `engaged_30sec` → `high_intent` → `begin_checkout`.
+4. **Funnel (optional):** Explore → Funnel exploration with steps `page_view` → `engaged_10sec` → `engaged_30sec` → `high_intent` → `begin_checkout`. Don't put `whatsapp_question` or `hipli_member_click` in the same funnel: they are separate paths. Break the report down by the `cta_location` dimension to see which button gets the taps.
 
 ## 3. Meta Pixel
 
@@ -63,11 +68,13 @@ Pixel `1418822797097429` is set in `pixelId`. The page sends:
 | Meta event | Type | When |
 | --- | --- | --- |
 | `PageView` | standard | Every page load |
-| `InitiateCheckout` | standard | A tap on a WhatsApp registration button, with `value` (ticket price) and `currency` IDR |
-| `Contact` | standard | A tap on "Tanya dulu" |
+| `InitiateCheckout` | standard | A tap on a "Daftar via WhatsApp" button, with `value` (ticket price), `currency` IDR and `cta_location` |
+| `Contact` | standard | A tap on "Tanya dulu", with `cta_location` |
+| `hipli_member_click` | custom | A tap on "Saya member HIPLI", with `cta_location` |
 | `scroll_50` | custom | Half of the page in view, once per visit |
+| `engaged_10sec` | custom | 10 seconds with the page visible, once per visit |
 | `engaged_30sec` | custom | 30 seconds with the page visible, once per visit |
-| `high_intent` | custom | Both of the above in one visit |
+| `high_intent` | custom | `scroll_50` and `engaged_30sec` in one visit |
 
 To optimize ads for registrations, use `InitiateCheckout`. For retargeting, create a Custom Audience in Meta Ads Manager → Audiences → Create audience → Custom audience → Website → event `high_intent`. Custom events show up in Events Manager after the first one is received; to use one as an optimization goal, create a Custom Conversion from it (Events Manager → Custom conversions).
 

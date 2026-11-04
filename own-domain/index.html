@@ -43,7 +43,7 @@
   --fs-body: 16px;
   --fs-small: 14px;
   --fs-label: 12px;
-  --section-y: clamp(72px, 8vw, 112px);
+  --section-y: clamp(52px, 8vw, 112px);
   --ease: cubic-bezier(.16, 1, .3, 1);
   color-scheme: light;
 }
@@ -232,11 +232,6 @@ section { padding-block: var(--section-y); position: relative; }
 .topic.a .topic-bg { background-image: var(--pilar-administrasi); background-position: center 55%; }
 .topic.b .topic-bg { background-image: var(--pilar-manajemen); background-position: center 10%; }
 .topic.b::after { background: linear-gradient(0deg, rgba(2,44,132,.97) 0%, rgba(2,44,132,.82) 45%, rgba(2,44,132,.25) 80%, rgba(2,44,132,.05) 100%); }
-@media (max-width: 639px) {
-  .topic { min-height: 340px; }
-  .topic::after { background: linear-gradient(0deg, rgba(2,44,132,.96) 0%, rgba(2,44,132,.78) 38%, rgba(2,44,132,.15) 72%, rgba(2,44,132,0) 100%); }
-  .topic.b .topic-bg { background-size: auto 150%; background-position: 40% 0%; }
-}
 .topic.c .topic-bg { background-image: var(--pilar-legalitas); background-position: center 35%; }
 .topic.d .topic-bg { background-image: var(--pilar-marketing); background-position: center 35%; }
 .topic h3 { font: 800 clamp(18px, 1.8vw, 22px)/1.3 var(--font-display); }
@@ -362,6 +357,91 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
 .foot-plate .logo-hipli { height: 40px; }
 @media (max-width: 480px) { .foot-plate .div { display: none; } }
 
+/* ===== Audience cards inside "Tentang" (two small cards + what is included) ===== */
+.audience { grid-column: 1 / -1; display: grid; gap: 18px; }
+.aud-title { font: 800 var(--fs-h3)/1.35 var(--font-display); color: var(--ink); }
+.duo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.duo article { min-width: 0; }
+.duo article:nth-child(2) .chip { background: #DCEAFF; }
+.perks-wrap { margin-top: 4px; }
+
+/* ===== Mid-page CTA: same button, handler, data-ticket and WhatsApp message as every other register button ===== */
+.mid-cta { padding-block: 12px; position: relative; }
+.mid-cta.in-grid { grid-column: 1 / -1; padding-block: 0; }
+.mid-cta-box { display: grid; gap: 6px; padding: 14px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(135deg, #E6F2FF 0%, #fff 75%); box-shadow: 0 10px 30px rgba(0,85,242,.06); }
+.mid-cta-box p { font: 700 15px/1.35 var(--font-body); color: var(--ink); }
+.mid-cta-actions { display: grid; gap: 0; justify-items: stretch; }
+.mid-cta .pill { width: 100%; padding-block: 13px; }
+.mid-ask { justify-self: center; display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; font: 700 14px var(--font-body); color: var(--silk-2); text-decoration: underline; text-underline-offset: 4px; }
+.mid-ask:hover { color: var(--silk-1); }
+@media (min-width: 768px) {
+  .mid-cta-box { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; padding: 20px 28px; }
+  .mid-cta-actions { display: flex; align-items: center; gap: 16px; }
+  .mid-cta .pill { width: auto; }
+}
+
+/* ===== Ticket cards driven by CONFIG: "Hemat" label, single-card layout ===== */
+.save { font: 700 var(--fs-label) var(--font-body); padding: 5px 10px; border-radius: 999px; background: var(--pill-cyan); color: var(--ink); white-space: nowrap; }
+.ticket.hot .save { background: rgba(255,255,255,.2); color: #fff; }
+.save:empty { display: none; }
+.tickets[data-count="1"] { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
+#kegiatan { padding-top: 8px; }
+/* Touch targets: at least ~40px tall */
+.topnav .pill { padding-block: 13px; }
+.copy-btn { padding: 10px 16px; }
+
+/* ===== Phone density (target: Tiket starts in the upper half of the page) ===== */
+@media (max-width: 767px) {
+  .hero-body { padding-block: 32px 24px; gap: 16px; }
+  .hero-bar { padding-block: 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .partners { padding-block: 28px; }
+  .partners .wrap { gap: 20px; }
+
+  .s-head { padding-bottom: 16px; margin-bottom: 24px; }
+  .sub { font-size: var(--fs-body); }
+  .prose { font-size: var(--fs-body); gap: 12px; }
+  .about { gap: 26px; }
+  .about .s-head { margin-bottom: 14px; }
+  .pains { gap: 10px; }
+  .pains-title, .aud-title { font-size: 15px; }
+  .pain { padding: 14px 16px; gap: 2px 12px; border-radius: 14px; }
+  .pain i { width: 34px; height: 34px; border-radius: 10px; }
+  .pain i svg { width: 18px; height: 18px; }
+  .pain h3 { font-size: 15px; }
+  .pain p { font-size: var(--fs-small); line-height: 1.5; }
+  .audience { gap: 14px; }
+  .duo { gap: 10px; }
+  .duo article { padding: 14px; border-radius: 16px; gap: 6px; }
+  .duo .chip { font-size: 11px; padding: 4px 10px; }
+  .duo h3 { font: 700 15px/1.3 var(--font-body); }
+  .duo p { font-size: 13px; line-height: 1.5; }
+  .perks-wrap { gap: 8px 12px; }
+  .perks-wrap > b { font-size: 14px; }
+  .perks { gap: 8px; }
+  .perks span { padding: 5px 12px 5px 5px; font-size: 13px; gap: 8px; }
+  .perks i { width: 22px; height: 22px; }
+  .perks svg { width: 12px; height: 12px; }
+
+  /* "4 aspek": compact 2x2 photo cards, description stays visible */
+  .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .topic { min-height: 196px; padding: 14px; border-radius: 16px; gap: 4px; }
+  .topic h3 { font-size: 14px; line-height: 1.25; }
+  .topic p { font-size: 12.5px; line-height: 1.45; opacity: .95; }
+  .topic::after, .topic.b::after { background: linear-gradient(0deg, rgba(2,44,132,.97) 0%, rgba(2,44,132,.86) 50%, rgba(2,44,132,.3) 82%, rgba(2,44,132,.08) 100%); }
+  .more { margin-top: 12px; font-size: 14px; }
+
+  .spk { gap: 22px; }
+  .portrait { aspect-ratio: 8 / 7; max-width: 100%; border-radius: 20px; }
+  .spk .role { margin-bottom: 6px; }
+  .spk p { font-size: var(--fs-body); margin-top: 10px; }
+  .stats { gap: 28px; margin-top: 20px; padding-top: 16px; }
+  .spk-logo { margin-top: 16px; }
+
+  .ticket { padding: 22px; border-radius: 20px; gap: 14px; }
+  .member { padding: 18px; }
+  .gallery { gap: 14px; }
+}
+
 /* ===== Sticky mobile bar ===== */
 .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; background: rgba(2,44,132,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff;
   padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
@@ -421,11 +501,11 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
       <p class="lede enter d2">Pelajari 4 aspek penting mengelola laundry dari Nirwan, CEO BERANI. Tiket <s>Rp450.000</s> <b>Rp350.000</b>, sudah termasuk makan siang.</p>
       <div class="hero-actions enter d3">
         <a class="pill outline" href="#" data-wa="register" data-ticket="nonmember" data-loc="hero" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="hero_ask" target="_blank" rel="noopener">
+        <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="hero" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 21l2.1-5.3A8.4 8.4 0 1 1 21 11.5z"/></svg>
           Tanya dulu
         </a>
-        <a class="pill soft" href="#" data-wa="member" data-ticket="member" data-loc="hero_member" target="_blank" rel="noopener">
+        <a class="pill soft" href="#" data-wa="member" data-ticket="member" data-loc="hero" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>
           Saya member HIPLI
         </a>
@@ -497,7 +577,32 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
         <div class="pain reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></i><h3>Kualitas tergantung siapa yang jaga</h3><p>Tanpa SOP yang jelas, hasil cucian berbeda tiap shift dan komplain terus datang.</p></div>
         <div class="pain reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/></svg></i><h3>Promosi hanya mengandalkan lokasi</h3><p>Pelanggan lama pindah ke outlet baru, dan Anda belum punya cara menariknya kembali.</p></div>
       </div>
-    </div>
+      <!-- ===== Mid-page CTA (mid_tentang) ===== -->
+      <div class="mid-cta in-grid">
+        <div class="mid-cta-box reveal">
+          <p>Tiga hal itu terasa akrab?</p>
+          <div class="mid-cta-actions">
+            <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="mid_tentang" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="mid-ask" href="#" data-wa="ask" data-ticket="question" data-loc="mid_tentang" target="_blank" rel="noopener">Tanya dulu</a>
+          </div>
+        </div>
+      </div>
+      <div class="audience reveal">
+        <p class="aud-title">Untuk pemilik dan calon pemilik laundry:</p>
+        <div class="duo">
+          <article><span class="chip">Sudah punya laundry</span><h3>Rapikan outlet yang sudah berjalan</h3><p>Pulang dengan cara membenahi SDM, SOP, dan pemasaran agar outlet tetap dipilih pelanggan.</p></article>
+          <article><span class="chip">Mau buka laundry</span><h3>Mulai dengan persiapan yang benar</h3><p>Tahu apa saja yang perlu disiapkan sebelum buka, supaya tidak belajar dari kesalahan yang mahal.</p></article>
+        </div>
+        <div class="perks-wrap">
+          <b>Sudah termasuk:</b>
+          <div class="perks" aria-label="Fasilitas">
+            <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Sertifikat</span>
+            <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Makan siang</span>
+            <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Coffee break</span>
+            <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Souvenir</span>
+          </div>
+        </div>
+      </div>    </div>
   </section>
 
   <!-- ===== Topics ===== -->
@@ -517,6 +622,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
     </div>
   </section>
 
+  <!-- ===== Mid-page CTA (mid_materi) ===== -->
+  <div class="mid-cta">
+    <div class="wrap">
+      <div class="mid-cta-box reveal">
+        <p>Tertarik dengan materinya?</p>
+        <div class="mid-cta-actions">
+          <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="mid_materi" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="mid-ask" href="#" data-wa="ask" data-ticket="question" data-loc="mid_materi" target="_blank" rel="noopener">Tanya dulu</a>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- ===== Speaker ===== -->
   <section class="speaker-band" id="pembicara">
     <div class="wrap spk">
@@ -532,6 +649,56 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
           <div class="stat"><b>4</b><span>Kota: Jabodetabek, Bandung,<br>Semarang, Yogyakarta</span></div>
         </div>
         <div class="plate spk-logo"><span class="logo logo-berani" role="img" aria-label="BERANI Laundry Support System"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Mid-page CTA (mid_pembicara) ===== -->
+  <div class="mid-cta">
+    <div class="wrap">
+      <div class="mid-cta-box reveal">
+        <p>Ingin belajar langsung dari Nirwan?</p>
+        <div class="mid-cta-actions">
+          <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="mid_pembicara" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="mid-ask" href="#" data-wa="ask" data-ticket="question" data-loc="mid_pembicara" target="_blank" rel="noopener">Tanya dulu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== Tickets ===== -->
+  <section id="tiket">
+    <div class="wrap">
+      <div class="s-head reveal">
+        <h2 class="h2">Pilih tiket Anda</h2>
+        <p class="sub">Kirim pesan WhatsApp yang sudah terisi. Tim LaundryBiz membalas dengan link pembayaran dan konfirmasi kursi. <span class="seats" id="seats" hidden></span></p>
+      </div>
+      <div class="tickets">
+        <article class="ticket hot reveal" data-ticket="berani" hidden>
+          <div class="top"><h3>Spesial via BERANI</h3><span class="flag">10 pendaftar pertama</span></div>
+          <div class="amount"><b id="berani-price"></b><s>Rp450.000</s><span class="save" id="berani-save"></span></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Kursi seminar tatap muka</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sertifikat, makan siang, coffee break</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Souvenir</li>
+          </ul>
+          <a class="pill wa" href="#" data-wa="register" data-ticket="berani" data-loc="tiket_berani" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
+          <small>Selama kuota 10 kursi masih ada</small>
+        </article>
+        <article class="ticket reveal" data-ticket="nonmember">
+          <div class="top"><h3>Non-member</h3><span class="flag">Harga umum</span></div>
+          <div class="amount"><b>Rp350.000</b><s>Rp450.000</s></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Kursi seminar tatap muka</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sertifikat, makan siang, coffee break</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Souvenir</li>
+          </ul>
+          <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="tiket_umum" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
+          <small>Link pembayaran dikirim lewat WhatsApp</small>
+        </article>
+      </div>
+      <div class="member reveal" style="background:var(--sky)">
+        <p><b>Anggota HIPLI?</b> Harga member Rp200.000. Link pembayarannya dibagikan di grup HIPLI, atau minta langsung ke tim kami.</p>
+        <a class="pill soft" href="#" data-wa="member" data-ticket="member" data-loc="tiket_hipli" target="_blank" rel="noopener">Saya member HIPLI</a>
       </div>
     </div>
   </section>
@@ -552,65 +719,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
     </div>
   </section>
 
-  <!-- ===== Audience + perks ===== -->
-  <section class="sky" id="untuk-siapa">
+  <!-- ===== Mid-page CTA (mid_kegiatan) ===== -->
+  <div class="mid-cta">
     <div class="wrap">
-      <div class="s-head reveal">
-        <h2 class="h2">Untuk pemilik dan calon pemilik laundry</h2>
-      </div>
-      <div class="duo">
-        <article class="reveal"><span class="chip">Sudah punya laundry</span><h3>Rapikan outlet yang sudah berjalan</h3><p>Pulang dengan cara membenahi SDM, SOP, dan pemasaran agar outlet tetap dipilih pelanggan.</p></article>
-        <article class="reveal"><span class="chip">Mau buka laundry</span><h3>Mulai dengan persiapan yang benar</h3><p>Tahu apa saja yang perlu disiapkan sebelum buka, supaya tidak belajar dari kesalahan yang mahal.</p></article>
-      </div>
-      <div class="perks-wrap reveal">
-      <b>Sudah termasuk:</b>
-      <div class="perks" aria-label="Fasilitas">
-        <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Sertifikat</span>
-        <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Makan siang</span>
-        <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Coffee break</span>
-        <span><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></i>Souvenir</span>
-      </div>
+      <div class="mid-cta-box reveal">
+        <p>Ikut seminar 14 November?</p>
+        <div class="mid-cta-actions">
+          <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="mid_kegiatan" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="mid-ask" href="#" data-wa="ask" data-ticket="question" data-loc="mid_kegiatan" target="_blank" rel="noopener">Tanya dulu</a>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- ===== Tickets ===== -->
-  <section id="tiket">
-    <div class="wrap">
-      <div class="s-head reveal">
-        <h2 class="h2">Pilih tiket Anda</h2>
-        <p class="sub">Kirim pesan WhatsApp yang sudah terisi. Tim LaundryBiz membalas dengan link pembayaran dan konfirmasi kursi. <span class="seats" id="seats" hidden></span></p>
-      </div>
-      <div class="tickets">
-        <article class="ticket hot reveal">
-          <div class="top"><h3>Spesial via BERANI</h3><span class="flag">10 pendaftar pertama</span></div>
-          <div class="amount"><b id="berani-price">Harga spesial</b><s>Rp450.000</s></div>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Kursi seminar tatap muka</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sertifikat, makan siang, coffee break</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Souvenir</li>
-          </ul>
-          <a class="pill wa" href="#" data-wa="register" data-ticket="berani" data-loc="ticket_berani" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
-          <small>Selama kuota 10 kursi masih ada</small>
-        </article>
-        <article class="ticket reveal">
-          <div class="top"><h3>Non-member</h3><span class="flag">Harga umum</span></div>
-          <div class="amount"><b>Rp350.000</b><s>Rp450.000</s></div>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Kursi seminar tatap muka</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sertifikat, makan siang, coffee break</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Souvenir</li>
-          </ul>
-          <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="ticket_nonmember" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
-          <small>Link pembayaran dikirim lewat WhatsApp</small>
-        </article>
-      </div>
-      <div class="member reveal" style="background:var(--sky)">
-        <p><b>Anggota HIPLI?</b> Harga member Rp200.000. Link pembayarannya dibagikan di grup HIPLI, atau minta langsung ke tim kami.</p>
-        <a class="pill soft" href="#" data-wa="member" data-ticket="member" data-loc="member_note" target="_blank" rel="noopener">Saya member HIPLI</a>
-      </div>
-    </div>
-  </section>
+  </div>
 
   <!-- ===== Details + FAQ ===== -->
   <section class="sky" id="faq">
@@ -623,7 +743,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
           <div class="fact"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></i><div><b>Sabtu, 14 November 2026</b><span>Bersamaan dengan Expo Laundry (HIPLI)</span></div></div>
           <div class="fact"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></i><div><b>10.00 WIB sampai selesai</b><span>Datang 30 menit lebih awal untuk registrasi</span></div></div>
           <div class="fact"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></i><div><b>ICE BSD City, Tangerang</b><a href="https://www.google.com/maps/search/?api=1&query=ICE+BSD+City" target="_blank" rel="noopener" data-track="maps">Buka di Google Maps</a></div></div>
-          <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="faq_ask" target="_blank" rel="noopener">Tanya dulu</a>
+          <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="faq" target="_blank" rel="noopener">Tanya dulu</a>
         </div>
         <div class="faq reveal">
           <div class="faq-item"><button class="faq-q" type="button" id="q1" aria-expanded="false" aria-controls="a1">Bagaimana cara daftar dan bayar?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button><div class="faq-a" id="a1" role="region" aria-labelledby="q1"><div><p>Tekan Daftar via WhatsApp, lengkapi nama dan kota di pesan yang sudah terisi, lalu kirim. Tim kami membalas dengan link pembayaran. Kursi terkonfirmasi setelah pembayaran diterima.</p></div></div></div>
@@ -644,8 +764,8 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
       <h2>Kursi tatap muka terbatas</h2>
       <p>Daftar sekarang, atau tanya dulu ke tim kami. Kami balas di jam kerja.</p>
       <div class="row">
-        <a class="pill outline" href="#" data-wa="register" data-ticket="nonmember" data-loc="final" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="final_ask" target="_blank" rel="noopener">Tanya dulu</a>
+        <a class="pill outline" href="#" data-wa="register" data-ticket="nonmember" data-loc="footer" target="_blank" rel="noopener">Daftar via WhatsApp <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="pill cyan" href="#" data-wa="ask" data-ticket="question" data-loc="footer" target="_blank" rel="noopener">Tanya dulu</a>
       </div>
       <p style="font-size:15px">Hotline LaundryBiz: <span class="hotline" id="hotline">0811-2005-5578</span><button class="copy-btn" type="button" id="copy-hotline">Salin</button></p>
     </div>
@@ -667,7 +787,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space
 
 <div class="sticky" id="sticky" aria-hidden="true">
   <div class="s-info"><b>Rp350.000</b>Sab, 14 Nov di ICE BSD City</div>
-  <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="sticky" target="_blank" rel="noopener" tabindex="-1">Daftar via WhatsApp</a>
+  <a class="pill wa" href="#" data-wa="register" data-ticket="nonmember" data-loc="sticky_bar" target="_blank" rel="noopener" tabindex="-1">Daftar via WhatsApp</a>
 </div>
 
 <script>
@@ -676,7 +796,9 @@ const CONFIG = {
   waNumber: "6281120055578",
   eventStart: "2026-11-14T10:00:00+07:00",
   tickets: {
-    berani:    { label: "Spesial via BERANI (10 pertama)", price: null },   // TODO: special price, e.g. 250000
+    // BERANI special: the card shows only when price is a number above 0 AND soldOut is false.
+    // Fill price (e.g. 250000) once confirmed; set soldOut: true when the first-10 quota is gone.
+    berani:    { label: "Spesial via BERANI (10 pertama)", price: null, soldOut: false },
     nonmember: { label: "Non-member",                        price: 350000 },
     member:    { label: "Member HIPLI",                      price: 200000 }
   },
@@ -721,6 +843,22 @@ if (CONFIG.pixelId) {
   fbq("init", CONFIG.pixelId);
   fbq("track", "PageView");
 }
+/* ===== Event map (GA4 name / Meta name) =====
+   Visit
+     page_view, first_visit (GA4, automatic) / PageView (Meta)
+   Attention (same names in GA4 and Meta; Meta gets them as custom events)
+     scroll_50       half of the page has been in view, once per visit
+     engaged_10sec   10 s with the page visible: told apart from an instant bounce
+     engaged_30sec   30 s with the page visible
+     high_intent     scroll_50 AND engaged_30sec in the same visit (+ user property high_intent_user = yes)
+   WhatsApp buttons (two separate paths, not steps of one funnel). All carry cta_location:
+     nav, hero, mid_materi, mid_pembicara, tiket_berani, tiket_umum, tiket_hipli, faq, footer, sticky_bar
+     begin_checkout / InitiateCheckout   tap on "Daftar via WhatsApp" (registration), with ticket price in IDR
+     whatsapp_question / Contact         tap on "Tanya dulu" (a question, not a registration)
+     hipli_member_click (GA4 + Meta custom)   tap on "Saya member HIPLI" (member price, handled by the team)
+   Page
+     view_tickets, faq_open, open_maps  (GA4 only)
+*/
 function track(event, params) {
   if (GA_DEBUG) console.info("[ga4]", event, params || {});
   try { if (window.gtag) gtag("event", event, Object.assign({ transport_type: "beacon" }, params)); } catch (e) {}
@@ -764,6 +902,18 @@ const engageTimer = setInterval(() => {
   pixelCustom("engaged_30sec", { engagement_seconds: 30 });
   checkHighIntent();
 }, 1000);
+
+// engaged_10sec: 10 seconds with the page visible. Separate timer, so the 30-second logic above is untouched.
+// It separates "left right away" (no event) from "read for a moment" (engaged_10sec, but no engaged_30sec).
+let visible10 = 0;
+const engage10Timer = setInterval(() => {
+  if (document.visibilityState !== "visible") return;
+  if (++visible10 < 10) return;
+  clearInterval(engage10Timer);
+  track("engaged_10sec", { engagement_seconds: 10 });
+  pixelCustom("engaged_10sec", { engagement_seconds: 10 });
+}, 1000);
+
 function pixel(event, params) {
   try { if (window.fbq) fbq("track", event, params); } catch (e) {}
 }
@@ -794,21 +944,44 @@ document.querySelectorAll("[data-wa]").forEach(a => {
   a.addEventListener("click", () => {
     const t = CONFIG.tickets[a.dataset.ticket] || {};
     const params = { cta_location: a.dataset.loc, ticket: a.dataset.ticket, method: "whatsapp" };
-    if (a.dataset.wa === "register" || a.dataset.wa === "member") {
-      // Initiate checkout = tapping a WhatsApp registration button (GA4 recommended event)
+    if (a.dataset.wa === "register") {
+      // Registration tap = initiate checkout (GA4 recommended event / Meta standard event)
       track("begin_checkout", Object.assign({
         currency: "IDR", value: t.price || 0,
         items: [{ item_id: a.dataset.ticket, item_name: t.label, item_category: "Tiket seminar", price: t.price || 0, quantity: 1 }]
       }, params));
-      pixel("InitiateCheckout", { content_name: t.label, currency: "IDR", value: t.price || 0 });
+      pixel("InitiateCheckout", { content_name: t.label, currency: "IDR", value: t.price || 0, cta_location: a.dataset.loc });
+    } else if (a.dataset.wa === "member") {
+      // HIPLI members get the member link from the team: tracked on its own, not as a checkout
+      track("hipli_member_click", params);
+      pixelCustom("hipli_member_click", { cta_location: a.dataset.loc });
     } else {
+      // "Tanya dulu": a question path, separate from registration
       track("whatsapp_question", params);
-      pixel("Contact");
+      pixel("Contact", { cta_location: a.dataset.loc });
     }
   });
 });
 
-if (CONFIG.tickets.berani.price) $("berani-price").textContent = rp(CONFIG.tickets.berani.price);
+// ===== Ticket cards: show only what is available, cheapest first =====
+// A card is shown when its CONFIG price is above 0 and it is not soldOut. The BERANI card also gets the big
+// price and a "Hemat RpX" label (difference from the Rp450.000 normal price). Nothing available = section keeps
+// the cards hidden, so a card without a price is never shown.
+const NORMAL_PRICE = 450000;
+(function renderTickets() {
+  const wrap = document.querySelector(".tickets");
+  const cards = Array.from(wrap.querySelectorAll(".ticket[data-ticket]"));
+  const cfg = c => CONFIG.tickets[c.dataset.ticket] || {};
+  const available = cards.filter(c => cfg(c).price > 0 && !cfg(c).soldOut);
+  cards.forEach(c => { c.hidden = available.indexOf(c) === -1; });
+  available.sort((a, b) => cfg(a).price - cfg(b).price).forEach(c => wrap.appendChild(c));
+  wrap.dataset.count = String(available.length);
+  const b = CONFIG.tickets.berani;
+  if (b.price > 0 && !b.soldOut) {
+    $("berani-price").textContent = rp(b.price);
+    $("berani-save").textContent = b.price < NORMAL_PRICE ? "Hemat " + rp(NORMAL_PRICE - b.price) : "";
+  }
+})();
 if (CONFIG.seatsLeft != null) { const s = $("seats"); s.textContent = "Sisa " + CONFIG.seatsLeft + " kursi."; s.hidden = false; }
 
 // ===== Countdown to 14 Nov 2026, 10.00 WIB =====
