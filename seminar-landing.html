@@ -846,7 +846,7 @@ if (CONFIG.pixelId) {
    WhatsApp buttons (two separate paths, not steps of one funnel). All carry cta_location:
      nav, hero, mid_materi, mid_pembicara, tiket_berani, tiket_umum, tiket_hipli, faq, footer, sticky_bar
      begin_checkout / InitiateCheckout   tap on "Daftar via WhatsApp" (registration), with ticket price in IDR
-     whatsapp_question / Contact         tap on "Tanya dulu" (a question, not a registration)
+     whatsapp_question / Contact         tap on "Tanya dulu" (a question, not a registration; Contact carries value 0, IDR)
      hipli_member_click (GA4 + Meta custom)   tap on "Saya member HIPLI" (member price, handled by the team)
    Page
      view_tickets, faq_open, open_maps  (GA4 only)
@@ -950,7 +950,9 @@ document.querySelectorAll("[data-wa]").forEach(a => {
     } else {
       // "Tanya dulu": a question path, separate from registration
       track("whatsapp_question", params);
-      pixel("Contact", { cta_location: a.dataset.loc });
+      // Meta's diagnostics want currency + value on Contact. A question has no money value, so it is sent as 0 IDR
+      // (an invented value would distort ROAS reports).
+      pixel("Contact", { currency: "IDR", value: 0, cta_location: a.dataset.loc });
     }
   });
 });

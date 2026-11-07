@@ -69,7 +69,7 @@ Pixel `1418822797097429` is set in `pixelId`. The page sends:
 | --- | --- | --- |
 | `PageView` | standard | Every page load |
 | `InitiateCheckout` | standard | A tap on a "Daftar via WhatsApp" button, with `value` (ticket price), `currency` IDR and `cta_location` |
-| `Contact` | standard | A tap on "Tanya dulu", with `cta_location` |
+| `Contact` | standard | A tap on "Tanya dulu", with `cta_location`, `currency` IDR and `value` 0 (a question has no money value; Meta's diagnostics ask for both fields) |
 | `hipli_member_click` | custom | A tap on "Saya member HIPLI", with `cta_location` |
 | `scroll_50` | custom | Half of the page in view, once per visit |
 | `engaged_10sec` | custom | 10 seconds with the page visible, once per visit |
